@@ -9,11 +9,24 @@
     <link rel="stylesheet" href="css/main.css" />
 </head>
 <body onload="onInitGame()">
-    <h1>MINE SWEEPER</h1>
-    
+    <h1 class="header">MINE SWEEPER</h1>
+
 <div calss="board-frame">
-    <!-- game goes here -->  
-    <table border="1" cellpadding="15">
+<div class="level">
+    <p data-level="0" class="chosen-level" onclick="OnChangeLevel(this)">BEGGINER</p>
+    <p data-level="1" onclick="OnChangeLevel(this)">MEDIUM</p>
+    <p data-level="2" onclick="OnChangeLevel(this)">EXPERT</p>
+</div>
+<div class="games-controls">
+    <p class="timer">Timer: <span class="timerdigits"></span></p>
+    <p class="restart" onclick="onInitGame()">🙂</p>
+    <div class="mines-manu">
+        <p class="mines"><span class="flag-count"> 2</span> <img src="img/minesweeperIcon.png"></p>
+    </div>
+
+</div>
+    <!-- game goes here: -->  
+    <table border="1" cellpadding="12">
         <!-- remove padding and customize table -->           
         <tbody class="board">
         </tbody>
@@ -21,10 +34,14 @@
 </div>
 
 
-
+<footer>
+    Elichay Kaplan Nov.2022
+</footer>
 
 
 <script src="js/utils.js"></script>
 <script src="js/minesweeper.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/timer.js"></script>
 </body>
 </html>

@@ -1,35 +1,43 @@
 'use strict'
 
-const FLAG_IMG = '🚩'
+const FLAG_IMG = '<img class="wrngflg" src="img/flagIcon.png">'
+const WRONG_FLAG_IMG = '<img class="Wrngflg" src="img/wrongflagIcon1.png">'
 const MINE_IMG = '<img class="mineImg" src="img/minesweeperIcon.png">'
 const EMPTY = ''
+const RESTART_IMG = '🙂'
+const RESTART_WIN_IMG = '😎'
+const RESTART_LOST_IMG = '🤦‍♂️'
 
 var gBoard
 
-var gLevel = {
-    size: 4,
-    mines: 2
-    // lives: 3
-}
+
 var gGame = {
-    isOn: true,
-    // isOn: false,
+    isOn: false,
+    isVictory: false,
     shownCount: 0,
     markedCount: 0,
     correctMarked: 0,
+    secsPassed: 0,
     clicks: 0
 }
 
 
 function onInitGame() {
-
+    var elRestartIMG = document.querySelector('.restart')
+    elRestartIMG.innerHTML = RESTART_IMG
+    gGame.shownCount = 0
+    gGame.markedCount = 0
+    gGame.correctMarked = 0
+    gGame.clicks = 0
+    gGame.isOn = true
+    gGame.isVictory = false
+    resetTimer()
+    minesCounter()
     gBoard = createBoard(gLevel)
     renderBoard(gBoard)
     console.log('gBoard', gBoard)
-    // getMinesArray(gBoard, 4)
 
 }
-
 
 function startGame(pos, elCell) {
     // gGame.isOn = true
@@ -40,6 +48,7 @@ function startGame(pos, elCell) {
     // renderBoard(gBoard)
     console.log('gBoard', gBoard)
     //start timer  <<<---------
+    startTimer()
 }
 
 //get array of random cells for mine planting
@@ -59,9 +68,6 @@ function plantMines(board, pos) {
         // var temp = board[0][0].location
         // console.log('temp.i', temp.i)
     }
-
-
-
 }
 
 //returns an array of random cells (that can except mines)
@@ -71,7 +77,7 @@ function getMinesArray(board, level, pos) {
     var minesArray = []
     var availableCells = getHiddenCells(board, pos)
     for (var i = level.mines; i > 0; i--) {
-        var rand = getRandomIntInc(0, availableCells.length-1)
+        var rand = getRandomIntInc(0, availableCells.length - 1)
         var CellMine = availableCells.splice(rand, 1)
         minesArray.push(CellMine[0])
     }
@@ -93,13 +99,10 @@ function getHiddenCells(board, pos) {
 }
 
 
-
 function onCellClicked(elCell) {
-    console.log('clicked')
+    // console.log('clicked')
     if (!gGame.isOn) return
     var cellLocation = getCellLocation(elCell)
-    
-    
     //extract data i and j to pos and send in startGame
 
     // if (!gGame.isOn) startGame(cellLocation, elCell) //game will start on first click
@@ -111,65 +114,139 @@ function onCellClicked(elCell) {
     gGame.shownCount++
     gGame.clicks++
     currCell.isShown = true
-    
-    if(gGame.clicks === 1) startGame(cellLocation)
-   
 
-    
-    if(currCell.isMine) return console.log('end Game')
+    if (gGame.clicks === 1) startGame(cellLocation)
+
+    if (currCell.isMine) return gameOver(elCell)
     // if(currCell.isMine) return endGame()
     elCell.classList.remove('covered')
-    console.log('currCell.negMinesCount', currCell.negMinesCount)
-    
-    if(currCell.negMinesCount){
-        elCell.innerText = currCell.negMinesCount
-        elCell.style.color = '"red"' //add color select switch
-    } 
+    // console.log('currCell.negMinesCount', currCell.negMinesCount)
 
+    if (currCell.negMinesCount) negsMinesCounterRender(currCell)
+    else expandShown(cellLocation.i, cellLocation.j)
 
     checkGameOver(elCell)
-    
-
-
-    // renderBoard(gBoard)
+    minesCounter()
 }
 
-function renderCell(location, value) {
-    // Select the elCell and set the value
-    // console.log('hello')
-    const elCell = document.querySelector(`.cell-${location.i}-${location.j}`)
-    elCell.innerHTML = value
-    // console.log('elCell', elCell)
+function negsMinesCounterRender(currCell) {
+    console.log('currCell', currCell)
+
+    var cellID = getSelector(currCell.location)
+    var elCell = document.querySelector(cellID)
+
+    console.log('elCell', elCell)
+    elCell.innerText = currCell.negMinesCount
+
+    var innerColor = ''
+
+    switch (currCell.negMinesCount) {
+        case 1:
+            innerColor = 'blue'
+            break
+        case 2:
+            innerColor = 'green'
+            break
+        case 3:
+            innerColor = 'red'
+            break
+        case 4:
+            innerColor = 'navy'
+            break
+        case 5:
+            innerColor = 'brown'
+            break
+        case 6:
+            innerColor = 'aqua'
+            break
+        case 7:
+            innerColor = 'black'
+            break
+        case 8:
+            innerColor = 'gray'
+            break
+    }
+    elCell.style.color = innerColor
+
 }
 
+//show amonut of mines minus amount of flagged cells
+function minesCounter() {
+    var elCounter = document.querySelector('.flag-count')
+    var minesAmount = gLevel.mines - gGame.markedCount
+    console.log('minesAmount', minesAmount)
 
-
-function checkGameOver(elCell) {
-    var cellLocation = getCellLocation(elCell)
-    var currCell = gBoard[cellLocation.i][cellLocation.j]
-
-    // if (currCell.isMine) gameOver()
-    console.log('shownCount + markedCount', gGame.shownCount + gGame.markedCount)
-    if(gGame.shownCount + gGame.markedCount === gLevel.size*gLevel.size) return console.log('you won')
-   
-
-    //check if all mines are marked and all other shown
-    //if yes. game over
+    if (minesAmount < 10) elCounter.innerText = (' ' + minesAmount)
+    else elCounter.innerText = minesAmount
 
 
 }
 
+//check victory:
+function checkGameOver() {
+    console.log('shownCount + correctMarked', gGame.shownCount + gGame.correctMarked)
+    if (gGame.shownCount + gGame.correctMarked === gLevel.size * gLevel.size) {
+        gGame.isVictory = true
+        gameOver()
+    }
+    //checks if all mines are marked and all other shown
+}
 
-function gameOver() {
+// function victory(){
+//     stopTimer()
+//     var elRestartIMG = document.querySelector('.restart')
+//     elRestartIMG.innerHTML = RESTART_WIN_IMG
+
+
+//     console.log('gGame.secsPassed', gGame.secsPassed)
+//     console.log('u won')
+// }
+
+function gameOver(elCell) { //loosing
+    stopTimer()
+    var elRestartIMG = document.querySelector('.restart')
+    console.log('gGame.secsPassed', gGame.secsPassed)
+    console.log('game over')
+
+
+    if (gGame.isVictory) {
+        elRestartIMG.innerHTML = RESTART_WIN_IMG
+        console.log('u won')
+        return
+    }
+
+
     console.log('u lost')
 
+    elRestartIMG.innerHTML = RESTART_LOST_IMG
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[i].length; j++) {
+            var currCell = gBoard[i][j]
+            var elCurrCell = document.querySelector(`#cell-${i}-${j}`);
+
+            if (currCell.isMine && !currCell.isFlagged) {
+                currCell.isCovered = false
+                elCurrCell.classList.remove('covered')
+                elCurrCell.innerHTML = MINE_IMG
+
+
+
+            } else {
+                if (currCell.isFlagged && !currCell.isMine)
+                    elCurrCell.innerHTML = WRONG_FLAG_IMG
+            }
+
+        }
+    }
+    elCell.style.backgroundColor = 'red'
+    gGame.isOn = false
 }
 
 //mouse right click flag a suspicus box.
 function onCellRightClicked(elCell, ev) {
     ev.preventDefault()
     // console.log('event', ev)
-    console.log('Right clicked')
+    // console.log('Right clicked')
     if (!gGame.isOn) return
     var cellLocation = getCellLocation(elCell)
     var isCovered = elCell.classList.contains('covered')
@@ -181,21 +258,65 @@ function onCellRightClicked(elCell, ev) {
         currCell.isFlagged = false
         gGame.markedCount--
         elCell.innerHTML = EMPTY
-        if(currCell.isMine) gGame.correctMarked--
+        if (currCell.isMine) gGame.correctMarked--
     } else {
         currCell.isFlagged = true
         gGame.markedCount++
         elCell.innerHTML = FLAG_IMG
-        if(currCell.isMine) gGame.correctMarked++   
+        if (currCell.isMine) gGame.correctMarked++
     }
-
+    minesCounter()
     checkGameOver(elCell)
-
-
-    console.log('gGame', gGame)
+    // console.log('gGame', gGame)
     // console.log('currCell', currCell)
 
 }
+
+
+
+function expandShown(cellI, cellJ) {
+    // var coord = { i: i, j: j }
+    // var cellI = i
+    // var cellJ = j
+    //find negs gBoardrics
+    // console.log('inside')
+    // console.log('cellI, cellJ', cellI, cellJ)
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (i === cellI && j === cellJ) continue
+            if (j < 0 || j >= gBoard[i].length) continue
+
+            var currCell = gBoard[i][j]
+
+            //show cell
+            // if(!currCell.isFlagged && !currCell.isShown){
+            if (!currCell.isFlagged && !currCell.isShown && !currCell.isMine) {
+                // if(currCell.negMinesCount)continue
+                var elCell = document.querySelector(`#cell-${i}-${j}`)
+                //remove covered
+                //color text
+                //add remove coverd and color text to function
+                //and take also from clickedCell
+                currCell.isShown = true
+                gGame.shownCount++
+                // console.log('elCell', elCell)
+                // console.log('i,j', i,j)
+
+                elCell.classList.remove('covered')
+
+                if (currCell.negMinesCount) negsMinesCounterRender(currCell)
+                else expandShown(i, j)
+                // elCell.innerText = currCell.negMinesCount
+                // elCell.style.color = 'blue'
+                // if (!currCell.negMinesCount) expandShown(i, j)
+            }
+        }
+    }
+}
+
+
 
 
 
@@ -266,16 +387,18 @@ function setMinesNegsCount() {
 
 
 function getMinesNegsCount(cellI, cellJ, mat) {
-    var CellNegsMinesCount = 0;
+    var CellNegsMinesCount = 0
 
     for (var i = cellI - 1; i <= cellI + 1; i++) {
-        if (i < 0 || i >= mat.length) continue;
+        if (i < 0 || i >= mat.length) continue
 
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-            if (i === cellI && j === cellJ) continue;
-            if (j < 0 || j >= mat[i].length) continue;
-            if (mat[i][j].isMine) CellNegsMinesCount++;
+            if (i === cellI && j === cellJ) continue
+            if (j < 0 || j >= mat[i].length) continue
+            if (mat[i][j].isMine) CellNegsMinesCount++
         }
     }
-    return CellNegsMinesCount;
+    return CellNegsMinesCount
 }
+
+

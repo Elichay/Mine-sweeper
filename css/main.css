@@ -1,14 +1,62 @@
+
+@font-face {
+    font-family: 'minecraft';
+    src: url(fonts/Minecraft.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'minecraftTen';
+    src: url(fonts/MinecraftTen.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'MinecraftEvenings';
+    src: url(fonts/MinecraftEvenings.ttf) format('truetype');
+}
+
+
+
+body{
+    font-family: 'minecraftTen', sans-serif;   
+}
+
+.header{
+font-family: 'MinecraftEvenings', sans-serif;
+font-size: 40px;
+
+}
+
+.boardFrame{
+height: 500;
+background-color: yellow;
+
+
+}
+
 .cell{
     background-color: rgb(95, 95, 130);
     color: black
 }
 
-.cell img{
-    width: 25px;
+.cell img, .mines img{
+    width: 20px;
     height: auto;
 
 }
 
 .covered{
     background-color: gray;
+}
+
+
+
+
+footer {
+    bottom:0;
+    position:fixed;
+    z-index: -100;
+    /* _position:absolute;
+    _top:expression(eval(document.documentElement.scrollTop+
+        (document.documentElement.clientHeight-this.offsetHeight))); */
+    height:35px;
 }
