@@ -21,6 +21,7 @@ body{
     background-image: url(../img/minecraftBackground.jpg);
     min-width: 420px;
     min-height: 575px;
+    zoom: 150%;
 }
 
 .header{
