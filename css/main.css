@@ -32,6 +32,14 @@ color: rgb(7, 45, 3);
 text-shadow: 0px 0px 5px rgb(10, 230, 10);
 }
 
+.highscore{
+    margin: auto;
+    height: 20px;
+    text-align: center;
+    /* width: fit-content; */
+    color: rgb(7, 45, 3);
+
+}
 /* hr{
     border: 7px solid rgb(7, 45, 3);
    border-radius: 5px;

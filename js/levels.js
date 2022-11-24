@@ -43,13 +43,31 @@ function OnChangeLevel(elLevelClicked) {
     elLevel.classList.remove('chosen-level')
     elLevelClicked.classList.add('chosen-level')
 
-
     gLevel = gLevels[levelChosenDataset]
-
+    
     setLevel()
-
+    
+    //  var level = getLevel(gLevel.size)
+    // var highScore = localStorage.getItem(`${level}HighScore`)
+    // if(!highScore){
+        //     var elHighscore = document.querySelector('.highscore')
+        //     elHighscore.innerText = ' '
+        // }
+        // else{
+            //     var htmlStr = level + ' High Score' + ': ' + highScore
+            //     elHighscore.innerText = htmlStr
+            // }
+            
+            renderHighScore(gLevel.size)
     onInitGame()
 }
+
+
+function showHighscore(){
+
+
+}
+
 
 
 function setLevel() {

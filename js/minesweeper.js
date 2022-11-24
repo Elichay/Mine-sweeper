@@ -43,6 +43,7 @@ function onInitGame() {
     renderBoard(gBoard)
     gGame.lives = gLevel.lives
     renderLives(gGame.lives)
+    renderHighScore(gLevel.size)
     renderHints()
     console.log('gBoard', gBoard)
 
@@ -174,6 +175,7 @@ function checkGameOver(elCell) {
 }
 
 
+
 function gameOver(elCell) { //loosing
     stopTimer()
     var elRestartIMG = document.querySelector('.restart')
@@ -183,6 +185,7 @@ function gameOver(elCell) { //loosing
     if (gGame.isVictory) {
         elRestartIMG.innerHTML = RESTART_WIN_IMG
         gGame.isOn = false
+        setHighScore(gGame.secsPassed, gLevel.size)
         console.log('u won')
         return
     }
