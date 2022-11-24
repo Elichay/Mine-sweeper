@@ -2,23 +2,27 @@
 
 const FLAG_IMG = '<img class="wrngflg" src="img/flagIcon.png">'
 const WRONG_FLAG_IMG = '<img class="Wrngflg" src="img/wrongflagIcon1.png">'
-const MINE_IMG = '<img class="mineImg" src="img/minesweeperIcon.png">'
+const MINE_IMG = '<img class="restrtImg" src="img/minesweeperIcon.png">'
 const EMPTY = ''
-const RESTART_IMG = '🙂'
-const RESTART_WIN_IMG = '😎'
-const RESTART_LOST_IMG = '🤦‍♂️'
+const RESTART_IMG = '<img class="restrtImg" src="img/steve-head.png">'
+const RESTART_WIN_IMG = '<img class="restrtImg" src="img/steaveSunglasses.png">'
+const RESTART_LOST_IMG = '<img class="restrtImg" src="img/skelaton.png">'
 
 var gBoard
-
+var gHintCell
 
 var gGame = {
     isOn: false,
     isVictory: false,
+    isHint: false,
     shownCount: 0,
     markedCount: 0,
     correctMarked: 0,
     secsPassed: 0,
-    clicks: 0
+    clicks: 0,
+    lives: 0,
+    mines: 0,
+    hints: 0
 }
 
 
@@ -32,82 +36,36 @@ function onInitGame() {
     gGame.isOn = true
     gGame.isVictory = false
     resetTimer()
+    gGame.hints = gLevel.hints
+    gGame.mines = gLevel.mines
     minesCounter()
     gBoard = createBoard(gLevel)
     renderBoard(gBoard)
+    gGame.lives = gLevel.lives
+    renderLives(gGame.lives)
+    renderHints()
     console.log('gBoard', gBoard)
 
 }
 
 function startGame(pos, elCell) {
-    // gGame.isOn = true
     plantMines(gBoard, pos)
     setMinesNegsCount()
-    // gBoard[pos.i][pos.j].isShown = true
-    // if(gBoard[pos.i][pos.j].negMinesCount > 0) elCell.innerText = gBoard[pos.i][pos.j].negMinesCount
-    // renderBoard(gBoard)
     console.log('gBoard', gBoard)
-    //start timer  <<<---------
     startTimer()
 }
 
-//get array of random cells for mine planting
-//and put mines in them
-function plantMines(board, pos) {
-    var minesArray = getMinesArray(board, gLevel, pos)
 
-    for (var i = 0; i < minesArray.length; i++) {
-        // console.log('minesArray[i].i', minesArray[i].i)
-        // console.log('minesArray[i].j', minesArray[i].j)
-        // console.log('minesArray', minesArray)
-        var boardPos = board[minesArray[i].i][minesArray[i].j]
-        boardPos.isMine = true
-
-        // console.log('boardPos',boardPos)
-        // console.log('boardPos',boardPos.location)
-        // var temp = board[0][0].location
-        // console.log('temp.i', temp.i)
-    }
-}
-
-//returns an array of random cells (that can except mines)
-//in the length of amont of mines in level
-function getMinesArray(board, level, pos) {
-    // var minesAmnt = level.mines
-    var minesArray = []
-    var availableCells = getHiddenCells(board, pos)
-    for (var i = level.mines; i > 0; i--) {
-        var rand = getRandomIntInc(0, availableCells.length - 1)
-        var CellMine = availableCells.splice(rand, 1)
-        minesArray.push(CellMine[0])
-    }
-    // console.log('minesArray', minesArray)
-    return minesArray
-}
-
-//optional mines array - all but first click.
-function getHiddenCells(board, pos) {
-    var availableCells = []
-    for (var i = 0; i < board.length; i++) {
-        for (var j = 0; j < board[i].length; j++) {
-            var currCellLocation = board[i][j].location
-            if (pos.i === currCellLocation.i && pos.j === currCellLocation.j) continue
-            availableCells.push(currCellLocation)
-        }
-    }
-    return availableCells
-}
 
 
 function onCellClicked(elCell) {
-    // console.log('clicked')
+    console.log('gGame.lives', gGame.lives)
     if (!gGame.isOn) return
+    if (gGame.isHint) {
+        hintPressed(elCell)
+        return
+    }
     var cellLocation = getCellLocation(elCell)
-    //extract data i and j to pos and send in startGame
-
-    // if (!gGame.isOn) startGame(cellLocation, elCell) //game will start on first click
-    // var isCovered = elCell.classList.contains('covered')
-    // if (!isCovered) return //if cell not covered. dont click it
     var currCell = gBoard[cellLocation.i][cellLocation.j]
     if (currCell.isShown) return //if cell not covered. dont click it
     if (currCell.isFlagged) return //after game start is cell is flag return
@@ -117,10 +75,26 @@ function onCellClicked(elCell) {
 
     if (gGame.clicks === 1) startGame(cellLocation)
 
-    if (currCell.isMine) return gameOver(elCell)
-    // if(currCell.isMine) return endGame()
+    ///adding life.
+    // if (currCell.isMine)gameOver(elCell)
+
+    if (currCell.isMine) {
+        gGame.lives--
+        gGame.mines--
+        // console.log('mine!')
+        console.log('gGame.lives', gGame.lives)
+        // elCell.classList.remove('covered')
+        elCell.innerHTML = MINE_IMG
+        renderLives(gGame.lives)
+
+        if (gGame.lives < 0) {
+            gameOver(elCell)
+        }
+    }
+
+
+    ////
     elCell.classList.remove('covered')
-    // console.log('currCell.negMinesCount', currCell.negMinesCount)
 
     if (currCell.negMinesCount) negsMinesCounterRender(currCell)
     else expandShown(cellLocation.i, cellLocation.j)
@@ -130,12 +104,12 @@ function onCellClicked(elCell) {
 }
 
 function negsMinesCounterRender(currCell) {
-    console.log('currCell', currCell)
 
     var cellID = getSelector(currCell.location)
     var elCell = document.querySelector(cellID)
-
-    console.log('elCell', elCell)
+    /// fix bug when bomb not shown
+    if (currCell.isMine) return
+    ///
     elCell.innerText = currCell.negMinesCount
 
     var innerColor = ''
@@ -173,34 +147,32 @@ function negsMinesCounterRender(currCell) {
 //show amonut of mines minus amount of flagged cells
 function minesCounter() {
     var elCounter = document.querySelector('.flag-count')
-    var minesAmount = gLevel.mines - gGame.markedCount
-    console.log('minesAmount', minesAmount)
+    var minesAmount = gGame.mines - gGame.markedCount
+    // console.log('minesAmount', minesAmount)
 
     if (minesAmount < 10) elCounter.innerText = (' ' + minesAmount)
     else elCounter.innerText = minesAmount
 
-
 }
 
 //check victory:
-function checkGameOver() {
+function checkGameOver(elCell) {
+    var cellLocation = getCellLocation(elCell)
+    var currCell = gBoard[cellLocation.i][cellLocation.j]
+    // console.log('elCell-vic', currCell)
     console.log('shownCount + correctMarked', gGame.shownCount + gGame.correctMarked)
     if (gGame.shownCount + gGame.correctMarked === gLevel.size * gLevel.size) {
-        gGame.isVictory = true
-        gameOver()
+        if (currCell.isMine && gGame.mines < 1) {
+            gGame.isVictory = false
+            gameOver()
+        } else {
+            gGame.isVictory = true
+            gameOver()
+        }
     }
     //checks if all mines are marked and all other shown
 }
 
-// function victory(){
-//     stopTimer()
-//     var elRestartIMG = document.querySelector('.restart')
-//     elRestartIMG.innerHTML = RESTART_WIN_IMG
-
-
-//     console.log('gGame.secsPassed', gGame.secsPassed)
-//     console.log('u won')
-// }
 
 function gameOver(elCell) { //loosing
     stopTimer()
@@ -208,13 +180,12 @@ function gameOver(elCell) { //loosing
     console.log('gGame.secsPassed', gGame.secsPassed)
     console.log('game over')
 
-
     if (gGame.isVictory) {
         elRestartIMG.innerHTML = RESTART_WIN_IMG
+        gGame.isOn = false
         console.log('u won')
         return
     }
-
 
     console.log('u lost')
 
@@ -228,14 +199,10 @@ function gameOver(elCell) { //loosing
                 currCell.isCovered = false
                 elCurrCell.classList.remove('covered')
                 elCurrCell.innerHTML = MINE_IMG
-
-
-
             } else {
                 if (currCell.isFlagged && !currCell.isMine)
                     elCurrCell.innerHTML = WRONG_FLAG_IMG
             }
-
         }
     }
     elCell.style.backgroundColor = 'red'
@@ -267,20 +234,12 @@ function onCellRightClicked(elCell, ev) {
     }
     minesCounter()
     checkGameOver(elCell)
-    // console.log('gGame', gGame)
-    // console.log('currCell', currCell)
 
 }
 
 
-
 function expandShown(cellI, cellJ) {
-    // var coord = { i: i, j: j }
-    // var cellI = i
-    // var cellJ = j
-    //find negs gBoardrics
-    // console.log('inside')
-    // console.log('cellI, cellJ', cellI, cellJ)
+
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue
 
@@ -295,27 +254,20 @@ function expandShown(cellI, cellJ) {
             if (!currCell.isFlagged && !currCell.isShown && !currCell.isMine) {
                 // if(currCell.negMinesCount)continue
                 var elCell = document.querySelector(`#cell-${i}-${j}`)
-                //remove covered
-                //color text
-                //add remove coverd and color text to function
-                //and take also from clickedCell
+
                 currCell.isShown = true
                 gGame.shownCount++
                 // console.log('elCell', elCell)
                 // console.log('i,j', i,j)
-
                 elCell.classList.remove('covered')
 
                 if (currCell.negMinesCount) negsMinesCounterRender(currCell)
                 else expandShown(i, j)
-                // elCell.innerText = currCell.negMinesCount
-                // elCell.style.color = 'blue'
-                // if (!currCell.negMinesCount) expandShown(i, j)
+
             }
         }
     }
 }
-
 
 
 
@@ -327,22 +279,14 @@ function renderBoard(board) {
         strHTML += '<tr>'
         for (var j = 0; j < board[i].length; j++) {
             var cell = board[i][j]
-            // var cellClass
-            // if(!cell.isShown) cellClass = 'covered'
-            // var negs = ''
-            // if(cell.isShown && !cell.isMine){
-            //     negs = (!cell.negMinesCount)? '' : cell.negMinesCount
-            // }
+
             var cellClass = (cell.isShown) ? '' : 'covered'
-            // console.log('cell.isMine',cell.isMine )
-            // if(cell.isMine) cellClass += ' mine'
+
             var cellID = `cell-${i}-${j}`
             var cellData = 'data-i="' + i + '" data-j="' + j + '"'
             strHTML += `<td id="${cellID}" class="cell ${cellClass}" ${cellData}
             onclick="onCellClicked(this,${i},${j})" oncontextmenu="onCellRightClicked(this,event,${i},${j})">
             </td>`
-            // ${negs}</td>`
-            //check about right or left click event
         }
         strHTML += '</tr>\n'
     }
@@ -351,23 +295,34 @@ function renderBoard(board) {
 }
 
 
-function createBoard(BoardSize) {
-    const mat = []
-    for (var i = 0; i < BoardSize.size; i++) {
-        mat[i] = []
-        for (var j = 0; j < BoardSize.size; j++) {
-            mat[i][j] = {
-                // location: `cell-${i}-${j}`,
-                location: { i: i, j: j },
-                isShown: false,
-                isFlagged: false,
-                isMine: false,
-                negMinesCount: null
-            }
-        }
+function renderLives() {
+
+    switch (gGame.lives) {
+        case 0:
+            document.querySelector('.life1 img').style.visibility = "hidden"
+            document.querySelector('.life2 img').style.visibility = "hidden"
+            document.querySelector('.life3 img').style.visibility = "hidden"
+            break
+        case 1:
+            document.querySelector('.life1 img').style.visibility = "visible"
+            document.querySelector('.life2 img').style.visibility = "hidden"
+            document.querySelector('.life3 img').style.visibility = "hidden"
+            break
+        case 2:
+            document.querySelector('.life1 img').style.visibility = "visible"
+            document.querySelector('.life2 img').style.visibility = "visible"
+            document.querySelector('.life3 img').style.visibility = "hidden"
+            break
+        case 3:
+            document.querySelector('.life1 img').style.visibility = "visible"
+            document.querySelector('.life2 img').style.visibility = "visible"
+            document.querySelector('.life3 img').style.visibility = "visible"
+            break
+
     }
-    return mat
 }
+
+
 
 //arrange mines negs count
 

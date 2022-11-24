@@ -43,16 +43,7 @@ function displayTimer() {
     }
 
     gGame.secsPassed = gSeconds
-    // var s = (seconds < 10) ? "00" + seconds : seconds
-    // var s = (seconds < 100)? "0" + seconds :seconds
-    // var ms = gMilliseconds < 10 ? "00" + gMilliseconds : (gMilliseconds < 100) ? "0" + gMilliseconds : gMilliseconds
-    // var ms = gMilliseconds
-    // if (ms < 10) {
-    //     ms = '00' + gMilliseconds
-    // } else if (ms < 100) {
-    //     ms = '0' + gMilliseconds
-    // }
-    elTimer.innerHTML = `${s}`
+     elTimer.innerHTML = `${s}`
 
 }
 

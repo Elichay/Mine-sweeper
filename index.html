@@ -10,27 +10,45 @@
 </head>
 <body onload="onInitGame()">
     <h1 class="header">MINE SWEEPER</h1>
-
+<!-- <hr> -->
 <div calss="board-frame">
 <div class="level">
-    <p data-level="0" class="chosen-level" onclick="OnChangeLevel(this)">BEGGINER</p>
-    <p data-level="1" onclick="OnChangeLevel(this)">MEDIUM</p>
-    <p data-level="2" onclick="OnChangeLevel(this)">EXPERT</p>
+    <button data-level="0" id="BEGGINER" class="chosen-level" onclick="OnChangeLevel(this)">BEGGINER</button>
+    <button data-level="1" id="MEDIUM" onclick="OnChangeLevel(this)">MEDIUM</button>
+    <button data-level="2" id="EXPERT" onclick="OnChangeLevel(this)">EXPERT</button>
+    <!-- <p data-level="0" id="BEGGINER" class="chosen-level" onclick="OnChangeLevel(this)">BEGGINER</p>
+    <p data-level="1" id="MEDIUM" onclick="OnChangeLevel(this)">MEDIUM</p>
+    <p data-level="2" id="EXPERT" onclick="OnChangeLevel(this)">EXPERT</p> -->
 </div>
-<div class="games-controls">
+<div class="game-controls">
     <p class="timer">Timer: <span class="timerdigits"></span></p>
-    <p class="restart" onclick="onInitGame()">🙂</p>
+    <p class="restart" onclick="onInitGame()"><img class="restrtImg" src="img/steve-head.png"></p>
     <div class="mines-manu">
         <p class="mines"><span class="flag-count"> 2</span> <img src="img/minesweeperIcon.png"></p>
     </div>
 
 </div>
+<div class="cells-frame">
+    <div class="hints">Hints
+        <p class="hint1"><img class="restrtImg" src="img/hint.png" onclick="onHintClick()"></p>
+        <p class="hint2"><img class="restrtImg" src="img/hint.png" onclick="onHintClick()"></p>
+        <p class="hint3"><img class="restrtImg" src="img/hint.png" onclick="onHintClick()"></p>
+    </div>
+
     <!-- game goes here: -->  
-    <table border="1" cellpadding="12">
+    <table border="1" cellpadding="1">
         <!-- remove padding and customize table -->           
         <tbody class="board">
         </tbody>
     </table> 
+
+    <div class="lives">Lives
+        <p class="life1"><img class="restrtImg" src="img/health.png"></p>
+        <p class="life2"><img class="restrtImg" src="img/health.png"></p>
+        <p class="life3"><img class="restrtImg" src="img/health.png"></p>
+    </div>
+
+    </div>
 </div>
 
 
@@ -43,5 +61,6 @@
 <script src="js/minesweeper.js"></script>
 <script src="js/levels.js"></script>
 <script src="js/timer.js"></script>
+<script src="js/hint.js"></script>
 </body>
 </html>

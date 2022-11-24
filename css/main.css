@@ -17,38 +17,165 @@
 
 
 body{
-    font-family: 'minecraftTen', sans-serif;   
+    font-family: 'minecraftTen', sans-serif; 
+    background-image: url(../img/minecraftBackground.jpg);
+    min-width: 420px;
+    min-height: 575px;
 }
 
 .header{
 font-family: 'MinecraftEvenings', sans-serif;
-font-size: 40px;
+font-size: 50px;
+margin: auto;
+width: fit-content;
+color: rgb(7, 45, 3);
+text-shadow: 0px 0px 5px rgb(10, 230, 10);
+}
+
+/* hr{
+    border: 7px solid rgb(7, 45, 3);
+   border-radius: 5px;
+    
+   width: fit-content;
+} */
+
+.level {
+    font-weight: 600;
+    margin-bottom: 20px;
+    user-select: none;
+    color: rgb(13, 18, 14);
+    margin: auto;
+    text-align: center;
 
 }
 
-.boardFrame{
-height: 500;
-background-color: yellow;
+.level button{
+    cursor: pointer;
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+}
+
+.chosen-level {
+    color: rgb(24, 62, 2);
+    text-shadow: 0px 0px 5px rgb(147, 238, 147);
+}
+#BEGGINER:hover, #MEDIUM:hover, #EXPERT:hover {
+    color: rgb(24, 62, 2);
+    text-shadow: 0px 0px 5px rgb(147, 238, 147);
+}
+
+.game-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    max-width: 500px;
+    margin: auto;
+}
+
+.mines-manu, .timer{
+    width: 85px;
+    height: 50px;
+    /* color: rgb(24, 62, 2) */
+}
+
+.restrtImg{
+    height: 50px;
+}
 
 
+.cells-frame {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    max-width: 200px;
+    margin: auto;
+}
+
+
+.hint{
+padding-bottom: 60px;
+    /* margin-bottom: 80px; */
+    /* text-align: left; */
+}
+
+.hint1 img, .hint2 img, .hint3 img{
+    /* visibility: hidden; */
+    text-align: left;
+    cursor: pointer;
+}
+
+.hints, .lives{
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+
+.lives img{
+    width: 25px;
+    text-align: center;
+    height: auto;
+    /* margin: auto; */
+    
+}
+
+.life1 img, .life2 img, .life3 img{
+    visibility:hidden;
+    text-align: center;
+    
+}
+
+
+table{
+    height: 500;
+    width: fit-content;
+    margin: auto;
+    margin-top: 25px;
+    margin-right: 5px;
+    /* min-width: 500px; */
+    /* border-radius: 10px; */
+    /* border: solid green2 2px; */
+    justify-content: space-evenly;
+    box-sizing: border-box;
+    /* padding-top:30px; */
+    background-color: green;
+    cursor: pointer;
 }
 
 .cell{
-    background-color: rgb(95, 95, 130);
-    color: black
+    text-align: center;
+    height: 20px;
+    width:20px;
+    background-color: #76cb86;
 }
+
+
+.covered{
+    background: linear-gradient(to left, rgb(30, 87, 5), rgb(12, 94, 3)); 
+}
+
+.covered:hover{
+    background: linear-gradient(to right, rgb(71, 193, 19), rgb(46, 112, 39)); 
+}
+
+
+
+.board-frame{
+    /* max-width: 300px; */
+    width: 200px;
+    height: 100px;
+}
+
 
 .cell img, .mines img{
     width: 20px;
     height: auto;
+    text-align: center;
+    margin: auto;
 
 }
-
-.covered{
-    background-color: gray;
-}
-
-
 
 
 footer {

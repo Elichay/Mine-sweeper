@@ -5,23 +5,26 @@
 
 var gLevels = [
     {
-    level: 'BEGGINER',
-    size: 4,
-    mines: 2
-    // lives: 3
-},
-{
-    level: 'MEDIUM',
-    size: 8,
-    mines: 14
-    // lives: 3
-}, 
-{
-    level: 'EXPERT',
-    size: 12,
-    mines: 32
-    // lives: 3
-}
+        level: 'BEGGINER',
+        size: 4,
+        mines: 2,
+        lives: 1,
+        hints: 2
+    },
+    {
+        level: 'MEDIUM',
+        size: 8,
+        mines: 14,
+        lives: 2,
+        hints: 3
+    },
+    {
+        level: 'EXPERT',
+        size: 12,
+        mines: 32,
+        lives: 3,
+        hints: 3
+    }
 ]
 
 
@@ -31,22 +34,36 @@ var gLevel = gLevels[0]
 
 
 
-function OnChangeLevel(elLevelClicked){
-var elLevel = document.querySelector('.level .chosen-level')
-// console.log('elLevelClicked', elLevelClicked)
-// var currDiffID = 0
-// var currDiffID = elLevel.querySelector('.chosen-level')
-// console.log('currDiffID', currDiffID)
-// console.log('elLevel', elLevel)
-// console.log('elLevelClicked.dataset.level', elLevelClicked.dataset.level)
-// console.log('elLevel.dataset.level', elLevel.dataset.level)
-var levelChosenDataset = elLevelClicked.dataset.level
-if(levelChosenDataset === elLevel.dataset.level) return
+function OnChangeLevel(elLevelClicked) {
+    var elLevel = document.querySelector('.level .chosen-level')
+    var levelChosenDataset = elLevelClicked.dataset.level
+    var PrevLevelDataset = elLevel.dataset.level
+    if (levelChosenDataset === PrevLevelDataset) return
 
-elLevel.classList.remove('chosen-level')
-elLevelClicked.classList.add('chosen-level')
+    elLevel.classList.remove('chosen-level')
+    elLevelClicked.classList.add('chosen-level')
 
-gLevel = gLevels[levelChosenDataset]
 
-onInitGame()
+    gLevel = gLevels[levelChosenDataset]
+
+    setLevel()
+
+    onInitGame()
+}
+
+
+function setLevel() {
+    var size = gLevel.size
+    switch (size) {
+        case 4: var elBar = document.querySelector('.cells-frame')
+            elBar.style.maxWidth = '200px'
+            break;
+        case 8: var elBar = document.querySelector('.cells-frame')
+            elBar.style.maxWidth = '300px'
+            break;
+        case 12: var elBar = document.querySelector('.cells-frame')
+            elBar.style.maxWidth = '400px'
+            break;
+    }
+
 }
