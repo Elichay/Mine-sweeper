@@ -33,14 +33,59 @@ color: rgb(7, 45, 3);
 text-shadow: 0px 0px 5px rgb(10, 230, 10);
 }
 
+
+.manual-highescore-dark{
+
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-evenly; */
+    margin: auto;
+    width: fit-content;
+}
+
+.manual{
+background-color: green;
+color:rgb(7, 45, 3);
+opacity: 40%;
+cursor: pointer;
+border-color: rgb(0, 128, 0);
+}
+
+.manual:hover{
+    opacity: 1;
+
+}
+
+.manual .clicked{
+    opacity: 1;
+    color:rgb(10, 230, 10);
+    text-shadow: 0px 0px 5px #22ff00;
+    border-color: gray;
+/* does not work :( */
+}
+
+
 .highscore{
     margin: auto;
     height: 20px;
     text-align: center;
     /* width: fit-content; */
     color: rgb(7, 45, 3);
+    margin-right: 50px;
+    margin-left: 50px;
 
 }
+
+.dark{
+    background-color: green;
+    opacity: 50%;
+    cursor: pointer;
+
+
+    visibility: hidden;
+    }
+
+
 /* hr{
     border: 7px solid rgb(7, 45, 3);
    border-radius: 5px;
@@ -93,7 +138,7 @@ text-shadow: 0px 0px 5px rgb(10, 230, 10);
 
 
 .timer-and-undo, .mines-manu{
-    width: 85px;
+    width: 91px;
     font-size: 16px;
     height: 40px;
     display: flex;
@@ -110,9 +155,9 @@ text-shadow: 0px 0px 5px rgb(10, 230, 10);
     display: flex;
 }
 
-.undo{
+/* .undo{
     visibility:hidden; 
-}
+} */
 
 .undo .text{
 margin-top: 3px;

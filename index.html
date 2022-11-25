@@ -12,8 +12,11 @@
     <h1 class="header">MINE SWEEPER</h1>
 <!-- <hr> -->
 <br>
-
-<div class="highscore"></div>
+<div class="manual-highescore-dark">
+    <button class="manual" onclick="onManual(this)">manual</button>
+    <div class="highscore"></div>
+    <button class="dark" onclick="onDark(this)">Dark Mode</button>
+</div>
 <br>
 <div calss="board-frame">
 <div class="level">
@@ -24,7 +27,7 @@
 <div class="game-controls">
     <div class="timer-and-undo">
         <p class="timer">Timer: <span class="timerdigits"></span></p>
-        <button class="undo"><span class="text">Undo: </span><img class="undoImg" src="img/undo.png"></button>
+        <button class="undo"><span class="text">Undo: </span><img class="undoImg" onclick="OnUndo()" src="img/undo.png"></button>
     </div>
     <p class="restart" onclick="onInitGame()"><img class="restrtImg" src="img/steve-head.png"></p>
     <div class="mines-manu">
@@ -69,5 +72,7 @@
 <script src="js/hint.js"></script>
 <script src="js/highscore.js"></script>
 <script src="js/safeclicks.js"></script>
+<script src="js/undo.js"></script>
+<script src="js/manual.js"></script>
 </body>
 </html>

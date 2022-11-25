@@ -17,11 +17,11 @@ function setHighScore(lastScore, size) {
 
 
 function renderHighScore(size) {
-    console.log('gLevel.level', gLevel.level)
+    // console.log('gLevel.level', gLevel.level)
     var level = getLevel(size)
     var elHighscore = document.querySelector('.highscore')
     var highScore = localStorage.getItem(`${level}HighScore`)
-    console.log('highScore', highScore)
+    // console.log('highScore', highScore)
     if (gLevel.level === level) {
 
         if (highScore) {

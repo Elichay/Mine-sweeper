@@ -74,6 +74,7 @@ function hideHint() {
             //    if (i === cellI && j === cellJ) continue //leave
             if (j < 0 || j >= gBoard[i].length) continue
             if (!gBoard[i][j].isHintShow) continue
+            // console.log('gBoard[i][j]', gBoard[i][j])
                 var cellID = getSelector(gBoard[i][j].location)
                 var elCell = document.querySelector(cellID)
                 //there shouldn't be any flagged cells. but

@@ -11,6 +11,7 @@ const RESTART_LOST_IMG = '<img class="restrtImg" src="img/skelaton.png">'
 var gBoard
 var gHintCell
 
+
 var gGame = {
     isOn: false,
     isVictory: false,
@@ -23,7 +24,9 @@ var gGame = {
     lives: 0,
     mines: 0,
     hints: 0,
-    safeClicks: 0
+    safeClicks: 0,
+    isManual: false,
+    gIsSet: false
 }
 
 
@@ -37,8 +40,10 @@ function onInitGame() {
     gGame.isOn = true
     gGame.isVictory = false
     resetTimer()
+    gPreviusBoards = []
     gGame.hints = gLevel.hints
     gGame.mines = gLevel.mines
+    gMinesConuter = gGame.mines
     minesCounter()
     gBoard = createBoard(gLevel)
     renderBoard(gBoard)
@@ -49,11 +54,13 @@ function onInitGame() {
     renderSafeClick()
     renderHints()
     console.log('gBoard', gBoard)
-
+    getCurrentBoards(gBoard)
+    gGame.isManual = false
+    gGame.gIsSet = false
 }
 
 function startGame(pos, elCell) {
-    plantMines(gBoard, pos)
+   if(!gGame.gIsSet) plantMines(gBoard, pos)
     setMinesNegsCount()
     console.log('gBoard', gBoard)
     startTimer()
@@ -61,6 +68,7 @@ function startGame(pos, elCell) {
 
 
 function onCellClicked(elCell) {
+    if(gGame.isManual) return
     console.log('gGame.lives', gGame.lives)
     if (!gGame.isOn) return
     if (gGame.isHint) {
@@ -74,12 +82,11 @@ function onCellClicked(elCell) {
     gGame.shownCount++
     gGame.clicks++
     currCell.isShown = true
-
     if (gGame.clicks === 1) startGame(cellLocation)
-
+    
     ///adding life.
     // if (currCell.isMine)gameOver(elCell)
-
+    
     if (currCell.isMine) {
         gGame.lives--
         gGame.mines--
@@ -88,21 +95,22 @@ function onCellClicked(elCell) {
         // elCell.classList.remove('covered')
         elCell.innerHTML = MINE_IMG
         renderLives(gGame.lives)
-
+        
         if (gGame.lives < 0) {
             gameOver(elCell)
         }
     }
 
-
+    
     ////
     elCell.classList.remove('covered')
-
+    
     if (currCell.negMinesCount) negsMinesCounterRender(currCell)
     else expandShown(cellLocation.i, cellLocation.j)
-
+    
     checkGameOver(elCell)
     minesCounter()
+    getCurrentBoards (gBoard)
 }
 
 
@@ -290,7 +298,7 @@ function renderBoard(board) {
             var cellID = `cell-${i}-${j}`
             var cellData = 'data-i="' + i + '" data-j="' + j + '"'
             strHTML += `<td id="${cellID}" class="cell ${cellClass}" ${cellData}
-            onclick="onCellClicked(this,${i},${j})" oncontextmenu="onCellRightClicked(this,event,${i},${j})">
+            onclick="onCellClicked(this,${i},${j}); onMineSelect(this,${i},${j})" oncontextmenu="onCellRightClicked(this,event,${i},${j})">
             </td>`
         }
         strHTML += '</tr>\n'
