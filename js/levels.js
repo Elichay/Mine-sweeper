@@ -1,37 +1,35 @@
 'use strict'
 
 
-
-
 var gLevels = [
     {
         level: 'BEGGINER',
         size: 4,
         mines: 2,
         lives: 1,
-        hints: 2
+        hints: 2,
+        safeClicks: 1
     },
     {
         level: 'MEDIUM',
         size: 8,
         mines: 14,
         lives: 2,
-        hints: 3
+        hints: 3,
+        safeClicks: 2
     },
     {
         level: 'EXPERT',
         size: 12,
         mines: 32,
         lives: 3,
-        hints: 3
+        hints: 3,
+        safeClicks: 3
     }
 ]
 
 
-
-
 var gLevel = gLevels[0]
-
 
 
 function OnChangeLevel(elLevelClicked) {
@@ -46,28 +44,9 @@ function OnChangeLevel(elLevelClicked) {
     gLevel = gLevels[levelChosenDataset]
     
     setLevel()
-    
-    //  var level = getLevel(gLevel.size)
-    // var highScore = localStorage.getItem(`${level}HighScore`)
-    // if(!highScore){
-        //     var elHighscore = document.querySelector('.highscore')
-        //     elHighscore.innerText = ' '
-        // }
-        // else{
-            //     var htmlStr = level + ' High Score' + ': ' + highScore
-            //     elHighscore.innerText = htmlStr
-            // }
-            
-            renderHighScore(gLevel.size)
+    renderHighScore(gLevel.size)
     onInitGame()
 }
-
-
-function showHighscore(){
-
-
-}
-
 
 
 function setLevel() {
@@ -83,5 +62,4 @@ function setLevel() {
             elBar.style.maxWidth = '400px'
             break;
     }
-
 }

@@ -73,11 +73,17 @@ function hideHint() {
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
             //    if (i === cellI && j === cellJ) continue //leave
             if (j < 0 || j >= gBoard[i].length) continue
-            if (gBoard[i][j].isHintShow === true) {
+            if (!gBoard[i][j].isHintShow) continue
                 var cellID = getSelector(gBoard[i][j].location)
                 var elCell = document.querySelector(cellID)
-
-                if (gBoard[i][j].isMine) {
+                //there shouldn't be any flagged cells. but
+                //encountered what seems to be a bug
+                //that hides the flag when hin removed.
+                //so added the flag options:
+                if (gBoard[i][j].isMine && gBoard[i][j].isFlagged) {
+                    elCell.classList.add('covered')
+                    elCell.innerHTML = FLAG_IMG
+                } else if (gBoard[i][j].isMine) {
                     elCell.classList.add('covered')
                     elCell.innerHTML = EMPTY
                 } else if (gBoard[i][j].isFlagged) {
@@ -86,8 +92,7 @@ function hideHint() {
                     elCell.classList.add('covered')
                     elCell.innerText = ''
                 }
-            }
-        }
+       }
     }
 }
 

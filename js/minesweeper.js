@@ -1,7 +1,7 @@
 'use strict'
 
 const FLAG_IMG = '<img class="wrngflg" src="img/flagIcon.png">'
-const WRONG_FLAG_IMG = '<img class="Wrngflg" src="img/wrongflagIcon1.png">'
+const WRONG_FLAG_IMG = '<img class="Wrngflg" src="img/wrongflagIcon2.png">'
 const MINE_IMG = '<img class="restrtImg" src="img/minesweeperIcon.png">'
 const EMPTY = ''
 const RESTART_IMG = '<img class="restrtImg" src="img/steve-head.png">'
@@ -22,7 +22,8 @@ var gGame = {
     clicks: 0,
     lives: 0,
     mines: 0,
-    hints: 0
+    hints: 0,
+    safeClicks: 0
 }
 
 
@@ -42,8 +43,10 @@ function onInitGame() {
     gBoard = createBoard(gLevel)
     renderBoard(gBoard)
     gGame.lives = gLevel.lives
+    gGame.safeClicks = gLevel.safeClicks
     renderLives(gGame.lives)
     renderHighScore(gLevel.size)
+    renderSafeClick()
     renderHints()
     console.log('gBoard', gBoard)
 
@@ -55,8 +58,6 @@ function startGame(pos, elCell) {
     console.log('gBoard', gBoard)
     startTimer()
 }
-
-
 
 
 function onCellClicked(elCell) {
@@ -104,11 +105,12 @@ function onCellClicked(elCell) {
     minesCounter()
 }
 
-function negsMinesCounterRender(currCell) {
 
+
+function negsMinesCounterRender(currCell) {
     var cellID = getSelector(currCell.location)
     var elCell = document.querySelector(cellID)
-    /// fix bug when bomb not shown
+    /// fix bug when bomb not shown:
     if (currCell.isMine) return
     ///
     elCell.innerText = currCell.negMinesCount
@@ -176,7 +178,7 @@ function checkGameOver(elCell) {
 
 
 
-function gameOver(elCell) { //loosing
+function gameOver(elCell) {
     stopTimer()
     var elRestartIMG = document.querySelector('.restart')
     console.log('gGame.secsPassed', gGame.secsPassed)
@@ -197,7 +199,7 @@ function gameOver(elCell) { //loosing
         for (var j = 0; j < gBoard[i].length; j++) {
             var currCell = gBoard[i][j]
             var elCurrCell = document.querySelector(`#cell-${i}-${j}`);
-
+//show the mines after loss:
             if (currCell.isMine && !currCell.isFlagged) {
                 currCell.isCovered = false
                 elCurrCell.classList.remove('covered')
@@ -212,7 +214,7 @@ function gameOver(elCell) { //loosing
     gGame.isOn = false
 }
 
-//mouse right click flag a suspicus box.
+//mouse right click flags a suspicus box.
 function onCellRightClicked(elCell, ev) {
     ev.preventDefault()
     // console.log('event', ev)

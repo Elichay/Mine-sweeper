@@ -12,7 +12,7 @@
     <h1 class="header">MINE SWEEPER</h1>
 <!-- <hr> -->
 <br>
-<!-- <div class="highscore"><span class="score-level"></span> Highscore: <span class="the-score"></span></div> -->
+
 <div class="highscore"></div>
 <br>
 <div calss="board-frame">
@@ -20,15 +20,16 @@
     <button data-level="0" id="BEGGINER" class="chosen-level" onclick="OnChangeLevel(this)">BEGGINER</button>
     <button data-level="1" id="MEDIUM" onclick="OnChangeLevel(this)">MEDIUM</button>
     <button data-level="2" id="EXPERT" onclick="OnChangeLevel(this)">EXPERT</button>
-    <!-- <p data-level="0" id="BEGGINER" class="chosen-level" onclick="OnChangeLevel(this)">BEGGINER</p>
-    <p data-level="1" id="MEDIUM" onclick="OnChangeLevel(this)">MEDIUM</p>
-    <p data-level="2" id="EXPERT" onclick="OnChangeLevel(this)">EXPERT</p> -->
 </div>
 <div class="game-controls">
-    <p class="timer">Timer: <span class="timerdigits"></span></p>
+    <div class="timer-and-undo">
+        <p class="timer">Timer: <span class="timerdigits"></span></p>
+        <button class="undo"><span class="text">Undo: </span><img class="undoImg" src="img/undo.png"></button>
+    </div>
     <p class="restart" onclick="onInitGame()"><img class="restrtImg" src="img/steve-head.png"></p>
     <div class="mines-manu">
         <p class="mines"><span class="flag-count"> 2</span> <img src="img/minesweeperIcon.png"></p>
+        <button class="SafeClick" onclick="onSafeClick(this)"><span>Safe.Clicks</span><span class="clicks">3</span></button>
     </div>
 
 </div>
@@ -67,5 +68,6 @@
 <script src="js/timer.js"></script>
 <script src="js/hint.js"></script>
 <script src="js/highscore.js"></script>
+<script src="js/safeclicks.js"></script>
 </body>
 </html>

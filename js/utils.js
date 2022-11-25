@@ -66,14 +66,6 @@ function getHiddenCells(board, pos) {
 }
 
 
-// function renderCell(location, value) {
-//     // Select the elCell and set the value
-//     // console.log('hello')
-//     const elCell = document.querySelector(`.cell-${location.i}-${location.j}`)
-//     elCell.innerHTML = value
-//     // console.log('elCell', elCell)
-// }
-
 function getCellLocation(elCell){
     var i = +elCell.id.split('-')[1]
     var j = +elCell.id.split('-')[2]
