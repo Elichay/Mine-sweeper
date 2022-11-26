@@ -18,7 +18,7 @@
 
 body{
     font-family: 'minecraftTen', sans-serif; 
-    background-image: url(../img/minecraftBackground.jpg);
+    background-image: url(../img/minecraftDarkBackground.jpg);
     min-width: 420px;
     min-height: 575px;
     zoom: 150%;
@@ -30,8 +30,8 @@ font-size: 50px;
 margin: auto;
 width: fit-content;
 
-color: rgb(7, 45, 3);
-text-shadow: 0px 0px 5px rgb(10, 230, 10);
+color: black;
+text-shadow: 0px 0px 5px rgb(4, 85, 4);
 }
 
 
@@ -59,8 +59,8 @@ border-color: rgb(0, 128, 0);
 
 .manual .clicked{
     opacity: 1;
-    color:rgb(10, 230, 10);
-    text-shadow: 0px 0px 5px #22ff00;
+    color:rgb(8, 171, 8);
+    text-shadow: 0px 0px 5px #20cf05;
     border-color: gray;
 /* does not work :( */
 }
@@ -71,10 +71,10 @@ border-color: rgb(0, 128, 0);
     height: 20px;
     text-align: center;
     /* width: fit-content; */
-    color: rgb(7, 45, 3);
+    color: rgb(0, 0, 0);
     margin-right: 50px;
     margin-left: 50px;
-
+    
 }
 
 .dark{
@@ -165,6 +165,7 @@ border-color: rgb(0, 128, 0);
 
 .undo .text{
 margin-top: 3px;
+color: black;
     
 }
 .undo img{
@@ -188,7 +189,7 @@ text-align: center;
     flex-direction: column;
     margin: auto;
     cursor: pointer;
-    border: solid green 2px;
+    border: solid black 2px;
     border-radius: 20%;
 
 }
@@ -259,7 +260,7 @@ table{
     justify-content: space-evenly;
     box-sizing: border-box;
     /* padding-top:30px; */
-    background-color: green;
+    background-color: black;
     cursor: pointer;
 }
 
@@ -267,7 +268,7 @@ table{
     text-align: center;
     height: 20px;
     width:20px;
-    background-color: #76cb86;
+    background-color: #49b95d;
 }
 
 
