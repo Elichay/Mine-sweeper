@@ -114,10 +114,16 @@ border-color: rgb(0, 128, 0);
     border: none;
 }
 
+.selected-seven{
+    color: rgb(24, 62, 2);
+    text-shadow: 0px 0px 5px rgb(147, 238, 147);
+}
+
 .chosen-level {
     color: rgb(24, 62, 2);
     text-shadow: 0px 0px 5px rgb(147, 238, 147);
 }
+
 #BEGGINER:hover, #MEDIUM:hover, #EXPERT:hover {
     color: rgb(24, 62, 2);
     text-shadow: 0px 0px 5px rgb(147, 238, 147);

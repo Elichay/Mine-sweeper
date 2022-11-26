@@ -26,7 +26,8 @@ var gGame = {
     hints: 0,
     safeClicks: 0,
     isManual: false,
-    gIsSet: false
+    gIsSet: false,
+    isSeven: false
 }
 
 
@@ -55,12 +56,14 @@ function onInitGame() {
     renderHints()
     console.log('gBoard', gBoard)
     getCurrentBoards(gBoard)
+    sevenOnInit()
+    // gGame.isSeven = false
     gGame.isManual = false
     gGame.gIsSet = false
 }
 
 function startGame(pos, elCell) {
-   if(!gGame.gIsSet) plantMines(gBoard, pos)
+    if (!gGame.gIsSet && !gGame.isSeven) plantMines(gBoard, pos)
     setMinesNegsCount()
     console.log('gBoard', gBoard)
     startTimer()
@@ -68,7 +71,7 @@ function startGame(pos, elCell) {
 
 
 function onCellClicked(elCell) {
-    if(gGame.isManual) return
+    if (gGame.isManual) return
     console.log('gGame.lives', gGame.lives)
     if (!gGame.isOn) return
     if (gGame.isHint) {
@@ -83,10 +86,10 @@ function onCellClicked(elCell) {
     gGame.clicks++
     currCell.isShown = true
     if (gGame.clicks === 1) startGame(cellLocation)
-    
+
     ///adding life.
     // if (currCell.isMine)gameOver(elCell)
-    
+
     if (currCell.isMine) {
         gGame.lives--
         gGame.mines--
@@ -95,22 +98,22 @@ function onCellClicked(elCell) {
         // elCell.classList.remove('covered')
         elCell.innerHTML = MINE_IMG
         renderLives(gGame.lives)
-        
+
         if (gGame.lives < 0) {
             gameOver(elCell)
         }
     }
 
-    
+
     ////
     elCell.classList.remove('covered')
-    
+
     if (currCell.negMinesCount) negsMinesCounterRender(currCell)
     else expandShown(cellLocation.i, cellLocation.j)
-    
+
     checkGameOver(elCell)
     minesCounter()
-    getCurrentBoards (gBoard)
+    getCurrentBoards(gBoard)
 }
 
 
@@ -206,7 +209,7 @@ function gameOver(elCell) {
         for (var j = 0; j < gBoard[i].length; j++) {
             var currCell = gBoard[i][j]
             var elCurrCell = document.querySelector(`#cell-${i}-${j}`);
-//show the mines after loss:
+            //show the mines after loss:
             if (currCell.isMine && !currCell.isFlagged) {
                 currCell.isCovered = false
                 elCurrCell.classList.remove('covered')
