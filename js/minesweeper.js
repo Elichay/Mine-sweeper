@@ -160,7 +160,6 @@ function minesCounter() {
     var elCounter = document.querySelector('.flag-count')
     var minesAmount = gGame.mines - gGame.markedCount
     // console.log('minesAmount', minesAmount)
-
     if (minesAmount < 10) elCounter.innerText = (' ' + minesAmount)
     else elCounter.innerText = minesAmount
 

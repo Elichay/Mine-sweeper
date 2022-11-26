@@ -80,11 +80,14 @@ border-color: rgb(0, 128, 0);
     background-color: green;
     opacity: 50%;
     cursor: pointer;
-
-
-    visibility: hidden;
+    color: #0ae60a ;
+    border-color : gray ;
+    /* visibility: hidden; */
     }
-
+    .dark:hover{
+        opacity: 1;
+    
+    }
 
 /* hr{
     border: 7px solid rgb(7, 45, 3);
